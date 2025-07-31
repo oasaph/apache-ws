@@ -1,3 +1,4 @@
+# shellcheck disable=SC2148
 ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
 [ ! -d $ZINIT_HOME ] && mkdir -p "$(dirname $ZINIT_HOME)"
 [ ! -d $ZINIT_HOME/.git ] && git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
@@ -37,6 +38,21 @@ zi light Freed-Wu/fzf-tab-source
 
 zi snippet OMZP::git
 zi snippet OMZP::sudo
+zi snippet OMZP::golang
+zi snippet OMZP::pipenv
+zi snippet OMZP::pyenv
+zi snippet OMZP::poetry
+zi snippet OMZP::podman
+zi snippet OMZP::rust
+zi snippet OMZP::ssh
+zi snippet OMZP::qrcode
+zi snippet OMZP::helm
+zi snippet OMZP::fnm
+zi snippet OMZP::eza
+zi snippet OMZP::dotenv
+zi snippet OMZP::colorize
+zi snippet OMZP::argocd
+zi snippet OMZP::aliases
 
 
 ### fzf-tab
@@ -44,6 +60,8 @@ zi snippet OMZP::sudo
 export LESSOPEN='|~/.lesspipe.sh %s'
 
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+# shellcheck disable=SC2086
+# shellcheck disable=SC2296
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 zstyle ':fzf-tab:*' fzf-bindings 'ctrl-j:accept' 'ctrl-a:toggle-all'

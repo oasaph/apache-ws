@@ -19,3 +19,17 @@ export INFOPATH="/home/linuxbrew/.linuxbrew/share/info:${INFOPATH:-}";
 ### Starship
 
 eval "$(starship init zsh)"
+
+### fnm
+
+eval "$(fnm env --use-on-cd --shell zsh)"
+
+### Pipx
+
+export PATH="$PATH:/home/user/.local/bin"
+
+### Pyenv
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"

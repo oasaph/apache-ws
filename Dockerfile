@@ -18,6 +18,7 @@ RUN <<"EOT" bash
     adduser --disabled-password --gecos '' "${USERNAME}"
     adduser "${USERNAME}" sudo
     echo '%sudo ALL=(ALL) NOPASSWD:ALL' >>/etc/sudoers
+    echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" >>/etc/sudoers
 
     printf "[user]\ndefault=%s\n" "${USERNAME}" >>/etc/wsl.conf
 EOT
@@ -33,7 +34,7 @@ RUN <<"EOT" bash
         bsdmainutils ca-certificates cmake curl eza file gcc git jq libncurses-dev tzdata nala \
         net-tools pipx procps software-properties-common libedit-dev unzip vim wget yq "$SHELL" \
         libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev \
-        xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+        xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev iputils-ping telnet
 EOT
 
 RUN <<"EOT" bash
@@ -64,6 +65,20 @@ EOT
 RUN <<"EOT" bash
     set -eux
 
+    # Helm
+    curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+EOT
+
+RUN <<"EOT" bash
+    set -eux
+
+    # Poetry
+    pipx install poetry
+EOT
+
+RUN <<"EOT" bash
+    set -eux
+
     # Brew
     NONINTERACTIVE=1 /bin/bash -c \
         "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -80,9 +95,21 @@ RUN <<"EOT" bash
     # NodeJs
     ${brew_path}/brew install -q fnm
     ${brew_path}/fnm install --lts
+
+    # Argo CD cli
+    ${brew_path}/brew install argocd
 EOT
 
 COPY ./setup/ /tmp/setup/
+
+RUN <<"EOT" bash
+    set -eux
+    
+    # Create Symbolic Links
+    sudo mkdir -p /opt/certs /opt/Documents /opt/Downloads /opt/.ssh
+    sudo ln -sf /opt/Documents ~/Documents
+    sudo ln -sf /opt/Downloads ~/Downloads
+EOT
 
 RUN <<"EOT" bash
     set -eux
@@ -101,16 +128,6 @@ RUN <<"EOT" bash
     
     # Init zsh
     zsh -x /home/"${USERNAME}"/.zshrc
-EOT
-
-RUN <<"EOT" bash
-    set -eux
-    
-    # Create Symbolic Links
-    sudo mkdir -p /opt/certs /opt/Documents /opt/Downloads /opt/.ssh
-    sudo ln -sf /opt/Documents ~/Documents
-    sudo ln -sf /opt/Downloads ~/Downloads
-    sudo ln -sf /opt/.ssh ~/.ssh
 EOT
 
 CMD [ "/bin/zsh" ]
