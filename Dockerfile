@@ -31,7 +31,9 @@ RUN <<"EOT" bash
     sudo apt-get update
     DEBIAN_FRONTEND=noninteractive sudo apt-get install -y bat bison build-essential \
         bsdmainutils ca-certificates cmake curl eza file gcc git jq libncurses-dev tzdata nala \
-        net-tools pipx procps software-properties-common libedit-dev unzip vim wget yq "$SHELL"
+        net-tools pipx procps software-properties-common libedit-dev unzip vim wget yq "$SHELL" \
+        libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncursesw5-dev \
+        xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 EOT
 
 RUN <<"EOT" bash
@@ -54,8 +56,8 @@ EOT
 
 RUN <<"EOT" bash
     set -eux
-    
-    # Go
+
+    # Podman
     sudo apt install -y podman
 EOT
 
@@ -72,8 +74,8 @@ RUN <<"EOT" bash
 
     # Python
     ${brew_path}/brew install -q pyenv pipenv
-    # ${brew_path}/pyenv install 3.9 3.10 3.11 3.12
-    # ${brew_path}/pyenv global 3.10
+    PYTHON_CONFIGURE_OPTS="--enable-shared" CFLAGS="-O2" ${brew_path}/pyenv install 3.9 3.10 3.11 3.12
+    ${brew_path}/pyenv global 3.10
 
     # NodeJs
     ${brew_path}/brew install -q fnm
