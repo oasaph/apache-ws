@@ -72,8 +72,8 @@ RUN <<"EOT" bash
 
     # Python
     ${brew_path}/brew install -q pyenv pipenv
-    # ${brew_path}/pyenv install 3.9 3.10 3.11 3.12
-    # ${brew_path}/pyenv global 3.10
+    ${brew_path}/pyenv install 3.9 3.10 3.11 3.12
+    ${brew_path}/pyenv global 3.10
 
     # NodeJs
     ${brew_path}/brew install -q fnm
@@ -87,7 +87,7 @@ RUN <<"EOT" bash
 
     ### Setup shell
     sudo cp -r /tmp/setup/zsh/. /tmp/setup/common/. ~/
-    sudo chown ${USERNAME}:${USERNAME} ~/.
+    sudo chown -R ${USERNAME}:${USERNAME} ~/.
 
     sudo chsh -s "$(which zsh)" "$(whoami)"
 EOT
@@ -99,6 +99,16 @@ RUN <<"EOT" bash
     
     # Init zsh
     zsh -x /home/"${USERNAME}"/.zshrc
+EOT
+
+RUN <<"EOT" bash
+    set -eux
+    
+    # Create Symbolic Links
+    mkdir -p /opt/certs /opt/Documents /opt/Downloads /opt/.ssh
+    ln -s /opt/Documents ~/Documents
+    ln -s /opt/Downloads ~/Downloads
+    ln -s /opt/.ssh ~/.ssh
 EOT
 
 CMD [ "/bin/zsh" ]

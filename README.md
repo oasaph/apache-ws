@@ -19,5 +19,5 @@ This image comes with the following tools pre-installed:
     - [pyenv](https://github.com/pyenv/pyenv)
     - [pipenv](https://pipenv.pypa.io/en/latest/)
     - [rustup](https://rustup.rs/)
-    - [fnm](https://github.com/Schniz/fnms)
+    - [fnm](https://github.com/Schniz/fnm)
 - [docker](https://www.docker.com/)
