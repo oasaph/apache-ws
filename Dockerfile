@@ -4,7 +4,7 @@ FROM ubuntu:${CODENAME}
 
 ARG SHELL=zsh
 ARG TZ="America/Sao_Paulo"
-ARG USERNAME=temporary
+ARG USERNAME=user
 
 ENV TZ=${TZ}
 
@@ -29,9 +29,9 @@ RUN <<"EOT" bash
     set -eux
 
     sudo apt-get update
-    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y bat build-essential ca-certificates cmake \
-        curl eza file gcc git jq libncurses-dev tzdata nala procps libedit-dev \
-        unzip vim wget yq "$SHELL"
+    DEBIAN_FRONTEND=noninteractive sudo apt-get install -y bat bison build-essential \
+        bsdmainutils ca-certificates cmake curl eza file gcc git jq libncurses-dev tzdata nala \
+        net-tools pipx procps software-properties-common libedit-dev unzip vim wget yq "$SHELL"
 EOT
 
 RUN <<"EOT" bash
@@ -45,23 +45,18 @@ EOT
 
 RUN <<"EOT" bash
     set -eux
-
-    CODENAME=$(. /etc/os-release && echo "$VERSION_CODENAME") # -> noble
-    ARCH=$(dpkg --print-architecture)                         # -> amd64
-
-    # Docker
-    sudo install -m 0755 -d /etc/apt/keyrings
-    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-    sudo chmod a+r /etc/apt/keyrings/docker.asc
-    echo \
-        "deb [arch=$ARCH signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
-        $CODENAME stable" |
-        sudo tee /etc/apt/sources.list.d/docker.list >/dev/null
+    
+    # Go
+    sudo add-apt-repository ppa:longsleep/golang-backports
     sudo apt update
-    sudo apt install -y containerd.io docker-buildx-plugin \
-        docker-ce docker-ce-cli docker-compose-plugin
-    sudo groupadd docker || true
-    sudo usermod -aG docker "${USERNAME}"
+    sudo apt install -y golang-go
+EOT
+
+RUN <<"EOT" bash
+    set -eux
+    
+    # Go
+    sudo apt install -y podman
 EOT
 
 RUN <<"EOT" bash
