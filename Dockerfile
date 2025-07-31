@@ -105,10 +105,10 @@ RUN <<"EOT" bash
     set -eux
     
     # Create Symbolic Links
-    mkdir -p /opt/certs /opt/Documents /opt/Downloads /opt/.ssh
-    ln -sf /opt/Documents ~/Documents
-    ln -sf /opt/Downloads ~/Downloads
-    ln -sf /opt/.ssh ~/.ssh
+    sudo mkdir -p /opt/certs /opt/Documents /opt/Downloads /opt/.ssh
+    sudo ln -sf /opt/Documents ~/Documents
+    sudo ln -sf /opt/Downloads ~/Downloads
+    sudo ln -sf /opt/.ssh ~/.ssh
 EOT
 
 CMD [ "/bin/zsh" ]
