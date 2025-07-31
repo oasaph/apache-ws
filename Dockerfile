@@ -72,8 +72,8 @@ RUN <<"EOT" bash
 
     # Python
     ${brew_path}/brew install -q pyenv pipenv
-    ${brew_path}/pyenv install 3.9 3.10 3.11 3.12
-    ${brew_path}/pyenv global 3.10
+    # ${brew_path}/pyenv install 3.9 3.10 3.11 3.12
+    # ${brew_path}/pyenv global 3.10
 
     # NodeJs
     ${brew_path}/brew install -q fnm
@@ -106,9 +106,9 @@ RUN <<"EOT" bash
     
     # Create Symbolic Links
     mkdir -p /opt/certs /opt/Documents /opt/Downloads /opt/.ssh
-    ln -s /opt/Documents ~/Documents
-    ln -s /opt/Downloads ~/Downloads
-    ln -s /opt/.ssh ~/.ssh
+    ln -sf /opt/Documents ~/Documents
+    ln -sf /opt/Downloads ~/Downloads
+    ln -sf /opt/.ssh ~/.ssh
 EOT
 
 CMD [ "/bin/zsh" ]
